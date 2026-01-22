@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy Birthday Brother!</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -312,7 +312,6 @@
                         0 0 80px rgba(255, 107, 107, 0.4),
                         0 10px 40px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
-            animation: buttonPulse 2s ease-in-out infinite, gradientShift 3s ease infinite;
             font-family: 'Poppins', sans-serif;
             letter-spacing: 2px;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
@@ -813,6 +812,7 @@
                 this.x = Math.random() * canvas.width;
                 this.y = canvas.height;
                 this.targetY = Math.random() * canvas.height * 0.4;
+                this.speed = Math.random
                 this.speed = Math.random() * 4 + 6;
                 this.hue = Math.random() * 360;
                 this.brightness = 60 + Math.random() * 20;
