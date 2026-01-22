@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Brother!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: radial-gradient(ellipse at center, #1a1f3a 0%, #0d1224 50%, #050810 100%);
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(78, 205, 196, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            filter: brightness(1.2) contrast(1.1);
+        }
+
+        .content-wrapper {
+            position: fixed;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 100;
+            width: 90%;
+            max-width: 700px;
+            padding: 20px;
+            animation: gentleZoom 3s ease-in-out infinite;
+        }
+
+        .photo-frame {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            border: 8px solid #ffffff;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
+            overflow: hidden;
+            background: #000000;
+            position: relative;
+            animation: photoGlow 3s ease-in-out infinite;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: 6px;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 217, 61, 0.8),
+                         0 0 40px rgba(255, 107, 107, 0.5);
+            margin-bottom: 15px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 217, 61, 0.8);
+            margin-top: 15px;
+            animation: subtitleGlow 2.5s ease-in-out infinite;
+        }
+
+        .greeting-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1.5px solid rgba(255, 255, 255, 0.18);
+            border-radius: 24px;
+            padding: 25px 35px;
+            margin: 25px auto 0;
+            max-width: 480px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            position: relative;
+            animation: cardFloat 4s ease-in-out infinite;
+        }
+
+        .greeting-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        .greeting-text {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 2;
+            letter-spacing: 0.5px;
+            text-align: left;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .greeting-signature {
+            color: #ffd93d;
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-align: right;
+            margin-top: 15px;
+            text-shadow: 0 0 20px rgba(255, 217, 61, 0.8);
+        }
+
+        .cake-container {
+            position: absolute;
+            bottom: 40px;
+            right: 100px;
+            z-index: 5;
+            filter: drop-shadow(0 10px 30px rgba(255, 105, 180, 0.5))
+                    drop-shadow(0 0 40px rgba(255, 217, 61, 0.3));
+        }
+
+        .cake {
+            width: 170px;
+            height: 140px;
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            border-radius: 12px 12px 0 0;
+            position: relative;
+            box-shadow: 0 8px 30px rgba(255, 105, 180, 0.7),
+                        inset 0 2px 10px rgba(255, 255, 255, 0.3);
+            animation: cakeWiggle 4s ease-in-out infinite;
+        }
+
+        .cake::before {
+            content: '';
+            position: absolute;
+            top: -18px;
+            left: 0;
+            width: 100%;
+            height: 24px;
+            background: linear-gradient(to right, #fffaf0, #ffe4e1, #fffaf0);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.5),
+                        inset 0 -2px 5px rgba(255, 192, 203, 0.3);
+        }
+
+        .cake-layer {
+            position: absolute;
+            bottom: 50px;
+            width: 100%;
+            height: 18px;
+            background: linear-gradient(to bottom, #ffffff, #ffe4e1);
+            opacity: 0.9;
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.4);
+        }
+
+        .candle {
+            position: absolute;
+            width: 10px;
+            height: 50px;
+            background: linear-gradient(to bottom, #4ecdc4, #45b7aa);
+            top: -50px;
+            border-radius: 4px;
+            animation: candleWiggle 2.5s ease-in-out infinite;
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.6);
+        }
+
+        .candle:nth-child(1) { left: 35px; animation-delay: 0s; }
+        .candle:nth-child(2) { left: 80px; animation-delay: 0.3s; }
+        .candle:nth-child(3) { left: 125px; animation-delay: 0.6s; }
+
+        .flame {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 26px;
+            background: radial-gradient(ellipse at center, #ffffff 0%, #ffd93d 30%, #ff6b6b 60%, transparent 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: flicker 0.2s ease-in-out infinite alternate;
+            box-shadow: 0 0 15px #ffd93d,
+                        0 0 30px #ff6b6b,
+                        0 0 45px rgba(255, 107, 107, 0.5);
+            filter: brightness(1.3);
+        }
+
+        .balloon {
+            position: absolute;
+            width: 60px;
+            height: 78px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: balloonFloat 5s ease-in-out infinite;
+            z-index: 1;
+            filter: drop-shadow(0 5px 20px rgba(0, 0, 0, 0.4)) brightness(1.2) saturate(1.3);
+        }
+
+        .balloon::before {
+            content: '';
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .balloon::after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 18px;
+            width: 16px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            filter: blur(2px);
+        }
+
+        .balloon1 { background: linear-gradient(135deg, #ff6b6b, #ff4757); top: 18%; left: 8%; animation-delay: 0s; }
+        .balloon2 { background: linear-gradient(135deg, #ffd93d, #ffa502); top: 28%; right: 8%; animation-delay: 0.7s; }
+        .balloon3 { background: linear-gradient(135deg, #6bcf7f, #2ed573); top: 12%; left: 18%; animation-delay: 1.4s; }
+        .balloon4 { background: linear-gradient(135deg, #4ecdc4, #1abc9c); top: 22%; right: 18%; animation-delay: 2.1s; }
+        .balloon5 { background: linear-gradient(135deg, #a777e3, #8e44ad); top: 32%; left: 12%; animation-delay: 2.8s; }
+        .balloon6 { background: linear-gradient(135deg, #ff1493, #c23870); top: 18%; right: 12%; animation-delay: 3.5s; }
+
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            animation: confettiFall 6s linear infinite;
+            filter: brightness(1.3);
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkleAnimation 2s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .start-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #1a1f3a 0%, #0d1224 50%, #050810 100%);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 1s ease-out;
+        }
+
+        .start-overlay.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcf7f, #4ecdc4, #a777e3);
+            background-size: 300% 300%;
+            animation: gradientShift 3s ease infinite;
+            border: none;
+            padding: 25px 50px;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 40px rgba(255, 217, 61, 0.6),
+                        0 0 80px rgba(255, 107, 107, 0.4),
+                        0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            animation: buttonPulse 2s ease-in-out infinite, gradientShift 3s ease infinite;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .start-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 60px rgba(255, 217, 61, 0.8),
+                        0 0 100px rgba(255, 107, 107, 0.6),
+                        0 15px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        .start-button:active {
+            transform: scale(1.05);
+        }
+
+        .start-text {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(255, 217, 61, 0.8);
+            animation: textGlow 2s ease-in-out infinite;
+        }
+
+        .overlay-sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .overlay-sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes textGlow {
+            0%, 100% { 
+                text-shadow: 0 0 20px rgba(255, 217, 61, 0.8);
+            }
+            50% { 
+                text-shadow: 0 0 40px rgba(255, 217, 61, 1),
+                             0 0 60px rgba(255, 107, 107, 0.8);
+            }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.7);
+                filter: blur(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+                filter: blur(0px);
+            }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes gradientRotate {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        @keyframes textFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes subtitleGlow {
+            0%, 100% { 
+                text-shadow: 0 0 20px rgba(255, 217, 61, 0.8),
+                             0 0 40px rgba(255, 107, 107, 0.5),
+                             0 4px 15px rgba(0, 0, 0, 0.9);
+            }
+            50% { 
+                text-shadow: 0 0 30px rgba(255, 217, 61, 1),
+                             0 0 60px rgba(107, 207, 127, 0.8),
+                             0 4px 15px rgba(0, 0, 0, 0.9);
+            }
+        }
+
+        @keyframes photoGlow {
+            0%, 100% { 
+                box-shadow: 0 0 40px rgba(255, 217, 61, 0.6),
+                            0 0 80px rgba(255, 107, 107, 0.4),
+                            0 0 120px rgba(138, 43, 226, 0.3),
+                            0 15px 50px rgba(0, 0, 0, 0.6);
+            }
+            50% { 
+                box-shadow: 0 0 50px rgba(107, 207, 127, 0.8),
+                            0 0 100px rgba(78, 205, 196, 0.6),
+                            0 0 150px rgba(138, 43, 226, 0.4),
+                            0 15px 50px rgba(0, 0, 0, 0.6);
+            }
+        }
+
+        @keyframes photoFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-18px) rotate(3deg); }
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scaleY(1) scaleX(1); opacity: 1; }
+            100% { transform: translateX(-50%) scaleY(1.15) scaleX(0.95); opacity: 0.9; }
+        }
+
+        @keyframes candleWiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(2.5deg); }
+            75% { transform: rotate(-2.5deg); }
+        }
+
+        @keyframes cakeWiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(1.5deg); }
+            75% { transform: rotate(-1.5deg); }
+        }
+
+        @keyframes balloonFloat {
+            0%, 100% { transform: translateY(0) rotate(-8deg); }
+            50% { transform: translateY(-30px) rotate(8deg); }
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(1080deg); opacity: 0; }
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes sparkleAnimation {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        @keyframes gentleZoom {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.03);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% { 
+                transform: scale(1);
+                text-shadow: 0 0 20px rgba(255, 217, 61, 0.8),
+                             0 0 40px rgba(255, 107, 107, 0.5);
+            }
+            50% { 
+                transform: scale(1.05);
+                text-shadow: 0 0 30px rgba(255, 217, 61, 1),
+                             0 0 50px rgba(255, 107, 107, 0.8);
+            }
+        }
+
+        @keyframes subtitleGlow {
+            0%, 100% { 
+                text-shadow: 0 0 20px rgba(255, 217, 61, 0.8);
+            }
+            50% { 
+                text-shadow: 0 0 30px rgba(255, 217, 61, 1),
+                             0 0 50px rgba(107, 207, 127, 0.8);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; letter-spacing: 4px; }
+            .subtitle { font-size: 1.1rem; letter-spacing: 1px; }
+            .photo-frame { width: 140px; height: 140px; }
+            .cake { width: 140px; height: 120px; }
+            .cake-container { right: 30px; bottom: 30px; }
+            .balloon { width: 48px; height: 62px; }
+            .greeting-card { padding: 20px 25px; max-width: 90%; }
+            .greeting-text { font-size: 1rem; line-height: 1.9; }
+            .greeting-signature { font-size: 1.2rem; }
+            .content-wrapper { top: 52%; max-width: 95%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Start Overlay -->
+    <div class="start-overlay" id="startOverlay">
+        <div class="overlay-sparkles" id="overlaySparkles"></div>
+        <div class="start-text">🎊 Get Ready for Something Special! 🎊</div>
+        <button class="start-button" id="startButton">
+            Start Celebration 🎉
+        </button>
+    </div>
+
+    <canvas id="fireworks"></canvas>
+    
+    <!-- Balloons -->
+    <div class="balloon balloon1"></div>
+    <div class="balloon balloon2"></div>
+    <div class="balloon balloon3"></div>
+    <div class="balloon balloon4"></div>
+    <div class="balloon balloon5"></div>
+    <div class="balloon balloon6"></div>
+
+    <div class="content-wrapper">
+        <div class="photo-frame">
+            <img src="./pic.png" alt="Brother" id="brotherPhoto">
+        </div>
+        
+        <h1>HAPPY BIRTHDAY</h1>
+        <p class="subtitle">To the Best Brother Ever! 🎉</p>
+        
+        <div class="greeting-card">
+            <div class="greeting-text">
+                Happy Birthday bhaiya 🎉❤️<br><br>
+                Thanks for always having my back and keeping it real.<br>
+                Wishing you a year full of wins, good health, and peace of mind.<br>
+                Keep shining 🤍✨
+            </div>
+            <div class="greeting-signature">— Alfiya</div>
+        </div>
+    </div>
+
+    <!-- Birthday Cake -->
+    <div class="cake-container">
+        <div class="cake">
+            <div class="candle">
+                <div class="flame"></div>
+            </div>
+            <div class="candle">
+                <div class="flame"></div>
+            </div>
+            <div class="candle">
+                <div class="flame"></div>
+            </div>
+            <div class="cake-layer"></div>
+        </div>
+    </div>
+
+    <!-- Hidden Audio Element - Autoplay -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Start button functionality
+        const startOverlay = document.getElementById('startOverlay');
+        const startButton = document.getElementById('startButton');
+        const overlaySparkles = document.getElementById('overlaySparkles');
+
+        // Create sparkles on overlay
+        for (let i = 0; i < 30; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'overlay-sparkle';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 2 + 's';
+            overlaySparkles.appendChild(sparkle);
+        }
+
+        startButton.addEventListener('click', () => {
+            console.log('Button clicked!');
+            
+            // Get music element
+            const bgMusic = document.getElementById('bgMusic');
+            
+            // Start music
+            if (bgMusic) {
+                bgMusic.volume = 0.7;
+                bgMusic.play().catch(err => {
+                    console.log('Music error:', err);
+                });
+            }
+            
+            // Fade out overlay
+            startOverlay.classList.add('fade-out');
+            
+            // Remove overlay after fade
+            setTimeout(() => {
+                startOverlay.style.display = 'none';
+            }, 1000);
+        });
+
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Create enhanced confetti
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#ffd93d', '#6bcf7f', '#4ecdc4', '#a777e3', '#ff1493'];
+            for (let i = 0; i < 40; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 6 + 's';
+                confetti.style.animationDuration = (Math.random() * 4 + 5) + 's';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                document.body.appendChild(confetti);
+            }
+        }
+        createConfetti();
+
+        // Create sparkles near cake
+        function createSparkles() {
+            const cakeArea = document.querySelector('.cake-container');
+            for (let i = 0; i < 15; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = (Math.random() * 200 - 50) + 'px';
+                sparkle.style.top = (Math.random() * 150 - 50) + 'px';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                cakeArea.appendChild(sparkle);
+            }
+        }
+        createSparkles();
+
+        // Autoplay music immediately
+        // Music will be triggered by start button
+
+        const fireworks = [];
+        const particles = [];
+
+        class Firework {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                this.targetY = Math.random() * canvas.height * 0.4;
+                this.speed = Math.random() * 4 + 6;
+                this.hue = Math.random() * 360;
+                this.brightness = 60 + Math.random() * 20;
+                this.exploded = false;
+                this.trail = [];
+            }
+
+            update() {
+                if (!this.exploded) {
+                    this.trail.push({x: this.x, y: this.y, alpha: 1});
+                    if (this.trail.length > 8) this.trail.shift();
+                    
+                    this.y -= this.speed;
+                    if (this.y <= this.targetY) {
+                        this.explode();
+                        this.exploded = true;
+                    }
+                }
+            }
+
+            draw() {
+                if (!this.exploded) {
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = `hsl(${this.hue}, 100%, ${this.brightness}%)`;
+                    
+                    this.trail.forEach((t, i) => {
+                        ctx.beginPath();
+                        ctx.arc(t.x, t.y, 3, 0, Math.PI * 2);
+                        ctx.fillStyle = `hsla(${this.hue}, 100%, ${this.brightness}%, ${t.alpha * (i / this.trail.length)})`;
+                        ctx.fill();
+                    });
+                    
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsl(${this.hue}, 100%, ${this.brightness}%)`;
+                    ctx.fill();
+                    
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            explode() {
+                const particleCount = Math.random() * 60 + 100;
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle(this.x, this.y, this.hue));
+                }
+            }
+        }
+
+        class Particle {
+            constructor(x, y, hue) {
+                this.x = x;
+                this.y = y;
+                this.hue = hue + Math.random() * 50 - 25;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 8 + 3;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.gravity = 0.12;
+                this.friction = 0.98;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.015 + 0.01;
+                this.size = Math.random() * 4 + 2;
+                this.brightness = 60 + Math.random() * 20;
+            }
+
+            update() {
+                this.vx *= this.friction;
+                this.vy *= this.friction;
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = `hsl(${this.hue}, 100%, ${this.brightness}%)`;
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                
+                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                gradient.addColorStop(0, `hsl(${this.hue}, 100%, ${this.brightness + 20}%)`);
+                gradient.addColorStop(1, `hsl(${this.hue}, 100%, ${this.brightness}%)`);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+                
+                ctx.shadowBlur = 0;
+                ctx.restore();
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(5, 8, 16, 0.12)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (Math.random() < 0.09) {
+                fireworks.push(new Firework());
+            }
+
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                fireworks[i].update();
+                fireworks[i].draw();
+                if (fireworks[i].exploded) {
+                    fireworks.splice(i, 1);
+                }
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Debug photo loading
+        const brotherPhoto = document.getElementById('brotherPhoto');
+        
+        // Force reload the image
+        brotherPhoto.src = './pic.png?v=' + new Date().getTime();
+        
+        brotherPhoto.onerror = function() {
+            console.error('❌ Image failed to load. Trying alternative paths...');
+            console.error('Current src:', this.src);
+            console.error('Full URL:', window.location.href);
+            
+            // Try different paths
+            const paths = ['pic.png', './pic.png', '/pic.png', 'BIRTHDAY-WISH/pic.png'];
+            let index = 0;
+            
+            const tryNextPath = () => {
+                if (index < paths.length) {
+                    console.log('Trying path:', paths[index]);
+                    this.src = paths[index] + '?v=' + new Date().getTime();
+                    index++;
+                } else {
+                    this.style.display = 'none';
+                    const photoFrame = document.querySelector('.photo-frame');
+                    photoFrame.innerHTML = '<div style="color: white; padding: 20px; font-size: 14px; text-align: center;">📷<br>Image not found<br><small>pic.png</small></div>';
+                    console.error('❌ All paths failed');
+                }
+            };
+            
+            this.onerror = tryNextPath;
+        };
+        
+        brotherPhoto.onload = function() {
+            console.log('✅ Image loaded successfully from:', this.src);
+        };
+
+        // Log the image source path
+        console.log('🔍 Looking for image at:', brotherPhoto.src);
+        console.log('🔍 Page location:', window.location.href);
+    </script>
+</body>
+</html>
